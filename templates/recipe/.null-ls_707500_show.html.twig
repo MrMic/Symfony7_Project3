@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title 'Recette : ' ~ slug %}
 
 {% block body %}
-    Home
+    {{ slug|upper }}
 {% endblock %}
