@@ -1,20 +1,14 @@
-
-{% extends 'base.html.twig' %}
-
+{% extends 'admin/admin.html.twig' %}
 {% block title 'Recette : ' ~ recipe.slug %}
-
-{% block body %}
-    <h1>{{ recipe.title }}</h1>
-
+    {% block body %}
+        <h1>{{ recipe.title }}</h1>
         {{ form(form) }}
-
-    {#
+        {#
         {{ form_start(form) }}
             <div class="d-flex">
                 {{ form_row(form.title) }}
                 {{ form_row(form.duration) }}
             </div>
         {{ form_end(form) }}
-    #}
-
-{% endblock %}
+#}
+    {% endblock %}

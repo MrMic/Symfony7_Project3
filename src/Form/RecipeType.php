@@ -21,7 +21,7 @@ class RecipeType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, [
-                'empty_class' => ''
+                // 'empty_class' => ''
                 ])
             ->add('slug', TextType::class, [
                 'required' => false,
@@ -33,7 +33,7 @@ class RecipeType extends AbstractType
                 // )
             ])
             ->add('content', TextareaType::class, [
-                'empty_class' => ''
+                // 'empty_class' => ''
                 ])
             ->add('duration')
             ->add('save', SubmitType::class, [
