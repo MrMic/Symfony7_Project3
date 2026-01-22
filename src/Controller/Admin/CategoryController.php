@@ -47,7 +47,6 @@ class CategoryController extends AbstractController
     #[Route('/{id}', name: 'edit', requirements: [ 'id' => Requirement::DIGITS ], methods: [ 'GET', 'POST' ])]
     public function edit(Category $category, Request $request, EntityManagerInterface $em): Response
     {
-        $category = new Category();
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
 
@@ -63,12 +62,14 @@ class CategoryController extends AbstractController
     }
 
     // ______________________________________________________________________
-    #[Route('/{id}', name: 'delete', requirements: [ 'id' => Requirement::DIGITS ], methods: [ 'DELETE' ])]
+    #[Route('/{id}', name: 'delete', methods: [ 'DELETE'], requirements: [ 'id' => Requirement::DIGITS ])]
     public function remove(Category $category, EntityManagerInterface $em): Response
     {
         $em->remove($category);
         $em->flush();
+
         $this->addFlash('success', 'La catégorie a bien été supprimée.');
+
         return $this->redirectToRoute('admin.category.index');
     }
 }
