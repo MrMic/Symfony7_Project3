@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Category;
+use App\Entity\Recipe;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -31,6 +33,13 @@ class CategoryType extends AbstractType
                 'label' => 'Enregistrer',
                 'attr' => ['class' => 'btn btn-primary mt-3']
             ])
+            // ->add('recipes', EntityType::class, [
+            //     'class' => Recipe::class,
+            //     'choice_label' => 'title',
+            //     'multiple' => true,
+            //     'expanded' => true,
+            //     'by_reference' => false,
+            // ])
             ->addEventListener(FormEvents::PRE_SUBMIT, $this->formListenerFactory->autoSlug('name'))
             ->addEventListener(FormEvents::POST_SUBMIT, $this->formListenerFactory->timeStamps())
         ;

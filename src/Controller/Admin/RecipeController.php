@@ -2,9 +2,12 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Category;
 use App\Entity\Recipe;
 use App\Form\RecipeType;
+use App\Repository\CategoryRepository;
 use App\Repository\RecipeRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,8 +22,14 @@ final class RecipeController extends AbstractController
     #[Route('/', name: 'index')]
     public function index(
         RecipeRepository $repository,
-        // EntityManagerInterface $em
+        CategoryRepository $categoryRepository,
+        EntityManagerInterface $em
     ): Response {
+        // $platPrincipal = $categoryRepository->findOneBy(['slug' => 'plat-principal']);
+        // $pates = $repository->findOneBy(['slug' => 'pates-bolognaise']);
+        // $pates->setCategory($platPrincipal);
+        // $em->flush();
+
         $recipes = $repository->findWithDurationLowerThan(20);
 
         // INFO: Accéde au repository via l' EntityManagerInterface
