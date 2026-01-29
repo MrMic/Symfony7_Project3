@@ -2,18 +2,17 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Category;
 use App\Entity\Recipe;
 use App\Form\RecipeType;
 use App\Repository\CategoryRepository;
 use App\Repository\RecipeRepository;
-use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 #[Route('/admin/recettes', name: 'admin.recipe.')]
 final class RecipeController extends AbstractController
@@ -55,12 +54,12 @@ final class RecipeController extends AbstractController
         // $em->flush();
 
         return $this->render('admin/recipe/index.html.twig', [
-            'recipes' => $recipes
+            'recipes' => $recipes,
         ]);
     }
 
     // ______________________________________________________________________
-    #[Route('/create', name: 'create') ]
+    #[Route('/create', name: 'create')]
     public function create(Request $request, EntityManagerInterface $em): Response
     {
         $recipe = new Recipe();
@@ -71,31 +70,34 @@ final class RecipeController extends AbstractController
             $em->persist($recipe);
             $em->flush();
             $this->addFlash('success', 'La recette a bien été créée !');
+
             return $this->redirectToRoute('admin.recipe.index');
         }
 
         return $this->render('admin/recipe/create.html.twig', [
-            'form' => $form
+            'form' => $form,
         ]);
     }
 
-
     // ______________________________________________________________________
     #[Route('/{id}', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => Requirement::DIGITS])]
-    public function edit(Recipe $recipe, Request $request, EntityManagerInterface $em): Response
+    public function edit(Recipe $recipe, Request $request, EntityManagerInterface $em, UploaderHelper $helper): Response
     {
+        // dd($helper->asset($recipe, 'thumbnailFile'));
+
         $form = $this->createForm(RecipeType::class, $recipe);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
             $this->addFlash('success', 'La recette a bien été mise à jour !');
+
             return $this->redirectToRoute('admin.recipe.index');
         }
 
         return $this->render('admin/recipe/edit.html.twig', [
             'recipe' => $recipe,
-            'form' => $form
+            'form' => $form,
         ]);
     }
 
