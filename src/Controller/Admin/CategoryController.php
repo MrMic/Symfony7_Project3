@@ -11,8 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/admin/category', name: 'admin.category.')]
+#[IsGranted('ROLE_ADMIN')]
 class CategoryController extends AbstractController
 {
     // ______________________________________________________________________
@@ -39,7 +41,7 @@ class CategoryController extends AbstractController
             return $this->redirectToRoute('admin.category.index');
         }
         return $this->render('admin/category/create.html.twig', [
-            'form' => $form
+            'form' => $form,
         ]);
     }
 
@@ -57,7 +59,7 @@ class CategoryController extends AbstractController
         }
         return $this->render('admin/category/edit.html.twig', [
             'category' => $category,
-            'form' => $form
+            'form' => $form,
         ]);
     }
 

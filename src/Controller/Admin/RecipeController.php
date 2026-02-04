@@ -12,9 +12,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 #[Route('/admin/recettes', name: 'admin.recipe.')]
+#[IsGranted('ROLE_ADMIN')]
 final class RecipeController extends AbstractController
 {
     // ______________________________________________________________________
@@ -24,11 +26,12 @@ final class RecipeController extends AbstractController
         CategoryRepository $categoryRepository,
         EntityManagerInterface $em
     ): Response {
-        // $platPrincipal = $categoryRepository->findOneBy(['slug' => 'plat-principal']);
-        // $pates = $repository->findOneBy(['slug' => 'pates-bolognaise']);
-        // $pates->setCategory($platPrincipal);
-        // $em->flush();
+        // INFO: $platPrincipal = $categoryRepository->findOneBy(['slug' => 'plat-principal']);
+        // INFO: $pates = $repository->findOneBy(['slug' => 'pates-bolognaise']);
+        // INFO: $pates->setCategory($platPrincipal);
+        // INFO: $em->flush();
 
+        // $this->denyAccessUnlessGranted('ROLE_USER');
         $recipes = $repository->findWithDurationLowerThan(20);
 
         // INFO: Accéde au repository via l' EntityManagerInterface
