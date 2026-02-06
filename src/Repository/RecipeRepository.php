@@ -5,17 +5,53 @@ namespace App\Repository;
 use App\Entity\Recipe;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @extends ServiceEntityRepository<Recipe>
  */
 class RecipeRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    // ── INFO: CONSTRUCTOR ───────────────────────────────────────────────
+    public function __construct(ManagerRegistry $registry, private PaginatorInterface $paginator)
     {
         parent::__construct($registry, Recipe::class);
     }
 
+    // ______________________________________________________________________
+    /**
+     * Paginate the ist of recipes
+     *
+     * @param Request $request the input request with query parameters
+     * @return SlidingPagination
+     */
+    public function paginateRecipes(int $page): SlidingPagination
+    {
+        return $this->paginator->paginate(
+            $this->createQueryBuilder('r')
+                ->leftJoin('r.category', 'c')
+                ->addSelect('r', 'c'),
+            $page,
+            20,
+            [
+                'distinct' => false,
+                'sortFieldWhitelist' => ['r.id', 'r.title'],
+            ]
+        );
+
+        /* return new Paginator(
+            $this->createQueryBuilder('r')
+                ->setFirstResult(($page - 1) * $limit)
+                ->setMaxResults($limit)
+                ->getQuery()
+                ->setHint(Paginator::HINT_ENABLE_DISTINCT, false),
+            false
+        ); */
+    }
+
+    // ______________________________________________________________________
     /**
      * Genère la somme des durées de toutes les recettes
      * @return int
@@ -28,6 +64,7 @@ class RecipeRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    // ______________________________________________________________________
     /**
      * Return recipes lower than duration
      *

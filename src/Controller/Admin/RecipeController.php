@@ -23,38 +23,14 @@ final class RecipeController extends AbstractController
     #[Route('/', name: 'index')]
     public function index(
         RecipeRepository $repository,
-        CategoryRepository $categoryRepository,
-        EntityManagerInterface $em
+        Request $request
     ): Response {
-        // INFO: $platPrincipal = $categoryRepository->findOneBy(['slug' => 'plat-principal']);
-        // INFO: $pates = $repository->findOneBy(['slug' => 'pates-bolognaise']);
-        // INFO: $pates->setCategory($platPrincipal);
-        // INFO: $em->flush();
-
         // $this->denyAccessUnlessGranted('ROLE_USER');
-        $recipes = $repository->findWithDurationLowerThan(20);
+        // $recipes = $repository->findWithDurationLowerThan(20);
 
-        // INFO: Accéde au repository via l' EntityManagerInterface
-        // $recipes = $em->getRepository(Recipe::class)->findWithDurationLowerThan(20);
+        $page = $request->query->getInt('page', 1);
+        $recipes = $repository->paginateRecipes($page);
 
-        // INFO: trouver le repository d'une entité
-        // dd($em->getRepository(Recipe::class));
-
-        // INFO: Ajouter une recette
-        // $recipe = new Recipe();
-        // $recipe->setTitle('Barbe à papa')
-        //     ->setSlug('barbe-a-papa')
-        //     ->setContent('La barbe à papa est une confiserie légère et sucrée ...')
-        //     ->setDuration(2)
-        //     ->setCreatedAt(new \DateTimeImmutable())
-        //     ->setUpdatedAt(new \DateTimeImmutable());
-        // $em->persist($recipe);
-
-        // INFO: Supprimer une recette
-        // $em->remove($recipes[0]);
-
-        // INFO: Sauvegarder les changements - Fais les requêtes SQL
-        // $em->flush();
 
         return $this->render('admin/recipe/index.html.twig', [
             'recipes' => $recipes,
