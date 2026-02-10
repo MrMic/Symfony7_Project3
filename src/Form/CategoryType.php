@@ -3,8 +3,6 @@
 namespace App\Form;
 
 use App\Entity\Category;
-use App\Entity\Recipe;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -16,6 +14,7 @@ class CategoryType extends AbstractType
 {
     public function __construct(private FormListenerFactory $formListenerFactory)
     {
+        //
     }
 
     // ______________________________________________________________________
@@ -23,15 +22,15 @@ class CategoryType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'empty_data' =>  ''
+                'empty_data' =>  '',
             ])
             ->add('slug', TextType::class, [
                 'required' => false,
-                'empty_data' => ''
+                'empty_data' => '',
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'Enregistrer',
-                'attr' => ['class' => 'btn btn-primary mt-3']
+                'attr' => ['class' => 'btn btn-primary mt-3'],
             ])
             // ->add('recipes', EntityType::class, [
             //     'class' => Recipe::class,
