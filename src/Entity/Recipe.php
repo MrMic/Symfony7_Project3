@@ -8,6 +8,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Attribute\Uploadable as VichUploadable;
 use Vich\UploaderBundle\Mapping\Attribute\UploadableField as VichUploadableField;
@@ -21,11 +22,13 @@ class Recipe
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('recipes.index')]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\Length(min: 5)]
     #[BanWord()]
+    #[Groups('recipes.index')]
     // #[Assert\Length(min: 5, groups: ['Extra'])]
     // #[BanWord(groups: ['Extra'])]
     private string $title = '';
@@ -36,10 +39,12 @@ class Recipe
         pattern: '/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
         message: 'The slug can only contain lowercase letters, numbers, and hyphens.'
     )]
+    #[Groups('recipes.index')]
     private string $slug = '';
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\Length(min: 5)]
+    #[Groups('recipes.show')]
     private string $content = '';
 
     #[ORM\Column]
@@ -54,10 +59,12 @@ class Recipe
         value: 1440,
         message: 'The duration must be less than {{ compared_value }} minutes.'
     )]
+    #[Groups('recipes.index')]
     // #[Assert\NotBlank()]
     private ?int $duration = null;
 
     #[ORM\ManyToOne(inversedBy: 'recipes', cascade: ['persist'])]
+    #[Groups('recipes.show')]
     private ?Category $category = null;
 
     #[ORM\Column(length: 255, nullable: true)]
