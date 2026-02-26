@@ -28,7 +28,7 @@ class Recipe
     #[ORM\Column(length: 255)]
     #[Assert\Length(min: 5)]
     #[BanWord()]
-    #[Groups('recipes.index')]
+    #[Groups(['recipes.index', 'recipes.create'])]
     // #[Assert\Length(min: 5, groups: ['Extra'])]
     // #[BanWord(groups: ['Extra'])]
     private string $title = '';
@@ -39,12 +39,12 @@ class Recipe
         pattern: '/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
         message: 'The slug can only contain lowercase letters, numbers, and hyphens.'
     )]
-    #[Groups('recipes.index')]
+    #[Groups(['recipes.index', 'recipes.create'])]
     private string $slug = '';
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\Length(min: 5)]
-    #[Groups('recipes.show')]
+    #[Groups(['recipes.show', 'recipes.create'])]
     private string $content = '';
 
     #[ORM\Column]
@@ -59,7 +59,7 @@ class Recipe
         value: 1440,
         message: 'The duration must be less than {{ compared_value }} minutes.'
     )]
-    #[Groups('recipes.index')]
+    #[Groups(['recipes.index', 'recipes.create'])]
     // #[Assert\NotBlank()]
     private ?int $duration = null;
 
