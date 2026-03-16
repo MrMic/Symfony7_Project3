@@ -27,12 +27,16 @@ class RecipeRepository extends ServiceEntityRepository
      * @param Request $request the input request with query parameters
      * @return SlidingPagination
      */
-    public function paginateRecipes(int $page): SlidingPagination
+    public function paginateRecipes(int $page, ?int $userId): SlidingPagination
     {
+        $builder =  $this->createQueryBuilder('r')
+            ->leftJoin('r.category', 'c')
+            ->addSelect('r', 'c');
+        if ($userId) {
+            $builder = $builder->andWhere('r.user = :userId')->setParameter('userId', $userId);
+        }
         return $this->paginator->paginate(
-            $this->createQueryBuilder('r')
-                ->leftJoin('r.category', 'c')
-                ->addSelect('r', 'c'),
+            $builder,
             $page,
             20,
             [
