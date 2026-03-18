@@ -1,0 +1,18 @@
+<?php
+
+namespace App\EventListener;
+
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
+
+final class DogCatListener
+{
+    #[AsEventListener]
+    public function onResponseEvent(ResponseEvent $event): void
+    {
+        $event->getResponse()
+            ->setContent(
+                str_replace('Cheese', '🥩 🍔', $event->getResponse()->getContent())
+            );
+    }
+}
