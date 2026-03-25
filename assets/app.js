@@ -1,5 +1,5 @@
 import "./stimulus_bootstrap.js";
-
+import "@hotwired/turbo";
 import canvasConfetti from "canvas-confetti";
 
 document.body.addEventListener("click", () => {

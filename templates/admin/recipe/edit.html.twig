@@ -1,7 +1,9 @@
 {% extends 'admin/admin.html.twig' %}
 {% block title 'Recette : ' ~ recipe.slug %}
     {% block body %}
-        <h1>{{ recipe.title }}</h1>
-        <img src="{{ vich_uploader_asset(recipe, 'thumbnailFile') }}" alt="">
-        {{ form(form) }}
+        <turbo-frame id="recipe_{{ recipe.id }}">
+            <h1>{{ recipe.title }}</h1>
+            <img src="{{ vich_uploader_asset(recipe, 'thumbnailFile') }}" alt="" class="img-fluid mb-3">
+            {{ form(form, {action: path('admin.recipe.edit', {id: recipe.id}) }) }}
+        </turbo-frame>
     {% endblock %}

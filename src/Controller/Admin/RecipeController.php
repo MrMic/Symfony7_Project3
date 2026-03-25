@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\UX\Turbo\TurboBundle;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 #[Route('/admin/recettes', name: 'admin.recipe.')]
@@ -95,10 +96,22 @@ final class RecipeController extends AbstractController
     // ______________________________________________________________________
     #[Route('/{id}', name: 'delete', methods: ['DELETE'], requirements: ['id' => Requirement::DIGITS])]
     #[IsGranted('RECIPE_EDIT', subject: 'recipe')]
-    public function delete(Recipe $recipe, EntityManagerInterface $em): Response
-    {
+    public function delete(
+        Request $request,
+        Recipe $recipe,
+        EntityManagerInterface $em
+    ): Response {
+        $recipeId = $recipe->getId();
+
         $em->remove($recipe);
         $em->flush();
+        if ($request->getPreferredFormat() === TurboBundle::STREAM_FORMAT) {
+            $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+            return $this->render('admin/recipe/delete.html.twig', [
+                'recipeId' => $recipeId,
+            ]);
+            ;
+        }
 
         $this->addFlash('success', 'La recette a bien été supprimée !');
 

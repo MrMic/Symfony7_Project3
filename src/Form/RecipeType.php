@@ -26,25 +26,13 @@ class RecipeType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, [
-                // NOTE:
-                // 'empty_class' => ''
+                'empty_data' => '',
             ])
             ->add('slug', TextType::class, [
                 'required' => false,
-                // NOTE:
-                // 'constraints' => new Sequentially(
-                //     [
-                //     new Length(min: 10),
-                //     new Regex(pattern: '/^[a-z0-9]+(?:-[a-z0-9]+)*$/', message: "Ceci n'est pas un slug valide") ,
-                //     ]
-                // )
             ])
             ->add('thumbnailFile', FileType::class)
-            ->add('category', EntityType::class, [
-                'class' => Category::class,
-                'choice_label' => 'name',
-                // 'expanded' => true,
-            ])
+            ->add('category', CategoryAutocompleteField::class)
             ->add('content', TextareaType::class, [
             ])
             ->add('duration')
